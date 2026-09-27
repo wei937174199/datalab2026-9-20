@@ -14,6 +14,38 @@
 
 ## 项目编译与环境指南
 
+### macOS
+
+macOS 上**只需要装一次命令行工具**，不需要 `build-essential`，也不存在 `gcc-multilib`（那是 Linux 专用包）。
+
+```bash
+# 1. 安装 Xcode Command Line Tools（提供 clang / make / python3）
+xcode-select --install
+
+# 2. 验证，三条都要有输出
+gcc --version        # 显示 Apple clang 是正常的，macOS 上 gcc 就是 clang 的别名
+make --version
+python3 --version
+```
+
+装完后即可直接编译，本机实测可用（macOS 15.7 / Apple Silicon / Apple clang 17 / GNU Make 3.81 / Python 3.9.6）：
+
+```bash
+make
+python3 test.py
+```
+
+macOS 注意事项：
+
+- `Makefile` 里的 `CC = gcc` **不用改**：macOS 的 `gcc` 指向 clang，编译本实验足够用。
+- **千万不要给 `make` 加 `-m32`**：`-m32` 与 `gcc-multilib` 都是 Linux 32 位环境的东西，Apple Silicon 不支持；本仓库默认就是 64 位编译，`int` 仍是 32 位，符合实验假设。
+- `python3` 用系统自带的就行，`test.py` 依赖的 `pycparser` 已随仓库提供，**不需要 `pip install`**。
+- 想用 GNU GCC 的话需要先装 Homebrew，再 `brew install gcc`，然后用 `make CC=gcc-15`（版本号按实际安装的填，Homebrew 不会覆盖 `gcc` 这个名字）。
+- 若 `xcode-select --install` 报错或 `make` 提示 `No rule to make target`，说明命令行工具没装好，可执行 `sudo rm -rf /Library/Developer/CommandLineTools` 后重新安装。
+- 编译时 `gcc` 可能报 `btest.c` 中 `points`、`max_points` 未使用的警告，这是模板自带的问题，与你的代码无关。
+
+### Linux（Ubuntu / 助教服务器）
+
 C 语言编译环境
 
 ```bash
@@ -53,8 +85,11 @@ make
 先在GitHub上fork此仓库
 
 ```bash
-# 在我们的服务器上，不需要执行这一行
-sudo apt-get update && sudo apt-get install build-essential gcc-multilib
+# macOS：确保命令行工具已安装（只需执行一次，装过会提示 already installed）
+xcode-select --install
+
+# Linux / 助教服务器：改成执行这一行，macOS 不需要
+# sudo apt-get update && sudo apt-get install build-essential gcc-multilib
 
 git clone <你的仓库地址>
 
@@ -64,6 +99,8 @@ make
 python3 test.py
 # 然后你应该看到最后一行输出 Total Points:0 的字样
 ```
+
+> 目录名按你 clone 下来的实际名字填（`cd` 后面那行）。
 
 ## 实验简述
 

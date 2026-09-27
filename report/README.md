@@ -44,3 +44,12 @@ https://typora.io/#download
 > 这个只需在vscode中下载插件即可完成预览和导出操作。
 
 ![alt text](Markdown.png)
+
+### macOS 提示
+
+上面两种方式在 macOS 上同样可用：
+
+- **Typora**：下载页选择 macOS 版本（.dmg），拖进「应用程序」即可；导出 PDF 用「文件 → 导出 → PDF」。
+- **VSCode 插件**：插件本身跨平台，右键 Markdown 预览选 `Chrome (Puppeteer)` 导出 PDF 最省事。
+- macOS 自带的「预览」「文本编辑」打不开 `.md` 的渲染效果，不要用它们导出。
+- 用 Homebrew 的话也可以 `brew install pandoc` 后命令行转换，但需要额外字体/LaTeX 才能排好中文，不如上面两种方式省心。
